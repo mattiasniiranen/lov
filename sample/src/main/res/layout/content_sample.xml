@@ -13,8 +13,11 @@
     tools:context="net.niiranen.permission.sample.SampleActivity"
     tools:showIn="@layout/activity_sample">
 
-    <TextView
+
+    <Button
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="@string/get_permissions"/>
 </RelativeLayout>

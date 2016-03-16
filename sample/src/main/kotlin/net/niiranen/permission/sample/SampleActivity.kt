@@ -22,7 +22,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_sample.*
+import kotlinx.android.synthetic.main.content_sample.*
 import net.niiranen.permission.AndroidPermission
 import net.niiranen.permission.Permission
 import net.niiranen.permission.PermissionRationale
@@ -56,11 +56,11 @@ class SampleActivity : AppCompatActivity() {
                                                     R.string.rationale_cancel,
                                                     R.string.storage_rationale_message))
 
-        fab.setOnClickListener({ view ->
-                                   requestPermissions(Manifest.permission.CAMERA,
-                                                      Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                           .subscribe({ onPermissionResult(it) },
-                                                      { Log.e("Sample", "Error $it", it) })
-                               })
+        button.setOnClickListener({ view ->
+                                      requestPermissions(Manifest.permission.CAMERA,
+                                                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                              .subscribe({ onPermissionResult(it) },
+                                                         { Log.e("Sample", "Error $it", it) })
+                                  })
     }
 }
