@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sample Application</string>
+    <string name="app_name">Permission Sample</string>
+    <string name="app_name_java">Permission Sample (Java)</string>
     <string name="action_settings">Settings</string>
 
     <string name="rationale_ok">@android:string/ok</string>
@@ -11,4 +12,5 @@
 
     <string name="storage_rationale_title">storage permission</string>
     <string name="storage_rationale_message">The storage permission is needed for testing</string>
+    <string name="get_permissions">Get Permissions</string>
 </resources>
