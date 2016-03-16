@@ -78,7 +78,12 @@ class PermissionActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         requestPermissions.forEach {
-            Permission.permissionSubjects.remove(it)?.onCompleted()
+            Permission.permissionSubjects.remove(it)?.apply {
+                onNext(AndroidPermission(it,
+                                         ActivityCompat.checkSelfPermission(this@PermissionActivity, it) == PackageManager.PERMISSION_GRANTED,
+                                         ActivityCompat.shouldShowRequestPermissionRationale(this@PermissionActivity, it)))
+                onCompleted()
+            }
         }
         super.onDestroy()
     }
