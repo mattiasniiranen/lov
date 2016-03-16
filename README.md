@@ -38,20 +38,7 @@ Lov.INSTANCE.request(context, permissions).subscribe(
         @Override
         public void call(AndroidPermission permission) {
             if (permission.getGranted()) {
-                Toast.makeText(JavaActivity.this,
-                               "Got permission for " + permission.getName(),
-                               Toast.LENGTH_LONG)
-                     .show();
-            } else if (permission.getShowRationale()) {
-                Toast.makeText(JavaActivity.this,
-                               "Show rationale for " + permission.getName(),
-                               Toast.LENGTH_LONG)
-                     .show();
-            } else {
-                Toast.makeText(JavaActivity.this,
-                               permission.getName() + " was denied",
-                               Toast.LENGTH_LONG)
-                     .show();
+                // Permission was granted
             }
         }
     }
