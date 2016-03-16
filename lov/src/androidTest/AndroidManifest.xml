@@ -1,0 +1,15 @@
+<manifest
+    package="net.niiranen.lov"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
+
+    <application>
+        <activity
+            android:name=".TestActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+    </application>
+</manifest>

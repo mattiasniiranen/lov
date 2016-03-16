@@ -73,9 +73,7 @@ object Lov {
         if (unrequested.isNotEmpty()) {
             val intent = Intent(context, LovActivity::class.java)
                     .putExtra(LovActivity.PERMISSIONS_KEY, unrequested.toTypedArray())
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK and
-                                      Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS and
-                                      Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.applicationContext.startActivity(intent)
         }
 
