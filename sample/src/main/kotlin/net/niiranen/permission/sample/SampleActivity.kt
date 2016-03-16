@@ -24,6 +24,8 @@ import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sample.*
 import net.niiranen.permission.AndroidPermission
+import net.niiranen.permission.Permission
+import net.niiranen.permission.PermissionRationale
 import net.niiranen.permission.requestPermissions
 
 class SampleActivity : AppCompatActivity() {
@@ -43,8 +45,20 @@ class SampleActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
         setSupportActionBar(toolbar)
 
+        Permission.addRationale(Manifest.permission.CAMERA,
+                                PermissionRationale(R.string.camera_rationale_title,
+                                                    R.string.rationale_ok,
+                                                    R.string.rationale_cancel,
+                                                    R.string.camera_rationale_message))
+        Permission.addRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                PermissionRationale(R.string.storage_rationale_title,
+                                                    R.string.rationale_ok,
+                                                    R.string.rationale_cancel,
+                                                    R.string.storage_rationale_message))
+
         fab.setOnClickListener({ view ->
-                                   requestPermissions(Manifest.permission.CAMERA)
+                                   requestPermissions(Manifest.permission.CAMERA,
+                                                      Manifest.permission.WRITE_EXTERNAL_STORAGE)
                                            .subscribe({ onPermissionResult(it) },
                                                       { Log.e("Sample", "Error $it", it) })
                                })

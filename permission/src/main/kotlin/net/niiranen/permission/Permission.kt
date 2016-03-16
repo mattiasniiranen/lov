@@ -27,6 +27,11 @@ import java.util.*
 
 object Permission {
     internal val permissionSubjects = HashMap<String, PublishSubject<AndroidPermission>>()
+    internal val rationales = HashMap<String, PermissionRationale>()
+
+    fun addRationale(permission: String, rationale: PermissionRationale) {
+        rationales[permission] = rationale
+    }
 
     /**
      * Requests permissions to be granted to [context].

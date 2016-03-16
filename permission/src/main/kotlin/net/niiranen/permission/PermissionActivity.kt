@@ -19,6 +19,7 @@ package net.niiranen.permission
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 
 class PermissionActivity : AppCompatActivity() {
@@ -28,20 +29,55 @@ class PermissionActivity : AppCompatActivity() {
         internal val PERMISSIONS_KEY = "permissions"
     }
 
-    private var requestPermissions: Array<out String>? = null
+    private val requestPermissions: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestPermissions = intent?.extras?.getStringArray(PERMISSIONS_KEY)
-        if (requestPermissions == null) {
+        requestPermissions.addAll(intent?.extras?.getStringArray(PERMISSIONS_KEY) ?: emptyArray())
+        if (requestPermissions.isEmpty()) {
             // Nothing for us to do
             finish()
         }
-        ActivityCompat.requestPermissions(this, requestPermissions!!, PERMISSION_REQUEST_CODE)
+        val parted = requestPermissions.partition {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, it) &&
+                    Permission.rationales.contains(it)
+        }
+        val showRationale = parted.first
+        showRationale.forEach { permission ->
+            val rationale = Permission.rationales[permission]!!
+            AlertDialog.Builder(this, R.style.Permission_RationaleDialog)
+                    .setTitle(rationale.title)
+                    .setMessage(rationale.message)
+                    .setCancelable(false)
+                    .setNegativeButton(rationale.negative,
+                                       { dialog, which ->
+                                           dialog.dismiss()
+                                           requestPermissions.remove(permission)
+                                           Permission.permissionSubjects.remove(permission)?.apply {
+                                               onNext(AndroidPermission(permission, false, true))
+                                               onCompleted()
+                                           }
+                                           if (requestPermissions.isEmpty()) {
+                                               finish()
+                                           }
+                                       })
+                    .setPositiveButton(rationale.positive,
+                                       { dialog, which ->
+                                           ActivityCompat.requestPermissions(this,
+                                                                             arrayOf(permission),
+                                                                             PERMISSION_REQUEST_CODE)
+                                           dialog.dismiss()
+                                       })
+                    .show()
+        }
+        if (parted.second.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, parted.second.toTypedArray(),
+                                              PERMISSION_REQUEST_CODE)
+        }
     }
 
     override fun onDestroy() {
-        requestPermissions?.forEach {
+        requestPermissions.forEach {
             Permission.permissionSubjects.remove(it)?.onCompleted()
         }
         super.onDestroy()
@@ -63,6 +99,9 @@ class PermissionActivity : AppCompatActivity() {
                 onCompleted()
             }
         }
-        finish()
+        requestPermissions.removeAll(permissions)
+        if (requestPermissions.isEmpty()) {
+            finish()
+        }
     }
 }
