@@ -17,7 +17,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "net.niiranen.permission.sample"
+        applicationId "net.niiranen.lov.sample"
         minSdkVersion 7
         targetSdkVersion 23
         versionCode 1
@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    compile project(':permission')
+    compile project(':lov')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'com.android.support:appcompat-v7:23.2.1'

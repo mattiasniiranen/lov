@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.niiranen.permission
+package net.niiranen.lov
 
 import android.content.Context
 import android.content.Intent
@@ -25,7 +25,7 @@ import rx.Observable
 import rx.subjects.PublishSubject
 import java.util.*
 
-object Permission {
+object Lov {
     internal val permissionSubjects = HashMap<String, PublishSubject<AndroidPermission>>()
     internal val rationales = HashMap<String, PermissionRationale>()
 
@@ -71,9 +71,11 @@ object Permission {
         }
 
         if (unrequested.isNotEmpty()) {
-            val intent = Intent(context, PermissionActivity::class.java)
-                    .putExtra(PermissionActivity.PERMISSIONS_KEY, unrequested.toTypedArray())
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val intent = Intent(context, LovActivity::class.java)
+                    .putExtra(LovActivity.PERMISSIONS_KEY, unrequested.toTypedArray())
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK and
+                                      Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS and
+                                      Intent.FLAG_ACTIVITY_NO_HISTORY)
             context.applicationContext.startActivity(intent)
         }
 
@@ -84,14 +86,14 @@ object Permission {
      * Runs [block] if all permissions are granted.
      */
     fun onPermissions(context: Context, vararg permissions: String, block: () -> Unit) {
-        Permission.request(context, *permissions).all { it.granted }
+        Lov.request(context, *permissions).all { it.granted }
                 .subscribe({
                                if (it) {
                                    block()
                                }
                            },
                            {
-                               Log.e("Permission", "Error requesting permission(s) $it", it)
+                               Log.e("Lov", "Error requesting permission(s) $it", it)
                            })
     }
 }
@@ -103,12 +105,12 @@ object Permission {
  * @param permissions The permissions to ask for.
  */
 fun <T : Context> T.requestPermissions(vararg permissions: String): Observable<AndroidPermission> {
-    return Permission.request(this, *permissions)
+    return Lov.request(this, *permissions)
 }
 
 /**
  * Runs [block] if all permissions are granted.
  */
 fun <T : Context> T.onPermissions(vararg permissions: String, block: () -> Unit) {
-    Permission.onPermissions(this, *permissions, block = block)
+    Lov.onPermissions(this, *permissions, block = block)
 }

@@ -1,8 +1,0 @@
-<manifest
-    package="net.niiranen.permission"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <application>
-        <activity android:name=".PermissionActivity"
-            android:theme="@style/Permission.Activity"/>
-    </application>
-</manifest>

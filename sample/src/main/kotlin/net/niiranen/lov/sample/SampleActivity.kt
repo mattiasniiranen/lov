@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.niiranen.permission.sample
+package net.niiranen.lov.sample
 
 import android.Manifest
 import android.os.Bundle
@@ -23,10 +23,10 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.content_sample.*
-import net.niiranen.permission.AndroidPermission
-import net.niiranen.permission.Permission
-import net.niiranen.permission.PermissionRationale
-import net.niiranen.permission.requestPermissions
+import net.niiranen.lov.AndroidPermission
+import net.niiranen.lov.Lov
+import net.niiranen.lov.PermissionRationale
+import net.niiranen.lov.requestPermissions
 
 class SampleActivity : AppCompatActivity() {
     fun onPermissionResult(permission: AndroidPermission): Unit {
@@ -45,16 +45,16 @@ class SampleActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar?
         setSupportActionBar(toolbar)
 
-        Permission.addRationale(Manifest.permission.CAMERA,
-                                PermissionRationale(R.string.camera_rationale_title,
-                                                    R.string.rationale_ok,
-                                                    R.string.rationale_cancel,
-                                                    R.string.camera_rationale_message))
-        Permission.addRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                PermissionRationale(R.string.storage_rationale_title,
-                                                    R.string.rationale_ok,
-                                                    R.string.rationale_cancel,
-                                                    R.string.storage_rationale_message))
+        Lov.addRationale(Manifest.permission.CAMERA,
+                         PermissionRationale(R.string.camera_rationale_title,
+                                             R.string.rationale_ok,
+                                             R.string.rationale_cancel,
+                                             R.string.camera_rationale_message))
+        Lov.addRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                         PermissionRationale(R.string.storage_rationale_title,
+                                             R.string.rationale_ok,
+                                             R.string.rationale_cancel,
+                                             R.string.storage_rationale_message))
 
         button.setOnClickListener({ view ->
                                       requestPermissions(Manifest.permission.CAMERA,

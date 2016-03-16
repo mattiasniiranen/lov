@@ -1,2 +1,2 @@
-include ':permission'
+include ':lov'
 include ':sample'

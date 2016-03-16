@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package net.niiranen.permission
+package net.niiranen.lov
 
-/**
- * Data class representing a permission status.
- * If [granted] and [showRationale] is both false the user most likely checked 'Never ask again'.
- *
- * @param name The name of the permission.
- * @param granted `true` if the permission vas granted.
- * @param showRationale `true` if permission rationale should be shown.
- */
-data class AndroidPermission(val name: String, val granted: Boolean, val showRationale: Boolean)
+import android.support.annotation.StringRes
+
+data class PermissionRationale(@StringRes val title: Int, @StringRes val positive: Int,
+                               @StringRes val negative: Int, @StringRes val message: Int)

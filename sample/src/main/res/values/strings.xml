@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Permission Sample</string>
-    <string name="app_name_java">Permission Sample (Java)</string>
+    <string name="app_name">Lov</string>
+    <string name="app_name_java">Lov (Java)</string>
 
     <string name="rationale_ok">@android:string/ok</string>
     <string name="rationale_cancel">@android:string/cancel</string>

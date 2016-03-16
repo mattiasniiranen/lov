@@ -1,13 +1,13 @@
-Permission
-==========
-A reactive extension permission requester for Android, written with Kotlin.
+Lov
+===
+Lov<sup>[loːv]</sup> is a library aimed at making permission requests on Android simple.
 
 Usage
 =====
 Using the object directly:
 ```kotlin
-Permission.requestPermissions(context, permissions)
-                   .subscribe({ if (it.granted) { /* Permission was granted */ } })
+Lov.requestPermissions(context, permissions)
+        .subscribe({ if (it.granted) { /* Permission was granted */ } })
 ```
 
 Or with the Context extension method:
@@ -18,22 +18,22 @@ requestPermissions(permissions)
 
 Show rationale when needed:
 ```kotlin
-Permission.addRationale(permission,
-                        PermissionRationale(R.string.rationale_title,
-                                            R.string.rationale_ok,
-                                            R.string.rationale_cancel,
-                                            R.string.rationale_message))
+Lov.addRationale(permission,
+                 PermissionRationale(R.string.rationale_title,
+                                     R.string.rationale_ok,
+                                     R.string.rationale_cancel,
+                                     R.string.rationale_message))
 ```
 
 Calling from java:
 ```java
-Permission.INSTANCE.addRationale(Manifest.permission.CAMERA,
-                                 new PermissionRationale(R.string.camera_rationale_title,
-                                                         R.string.rationale_ok,
-                                                         R.string.rationale_cancel,
-                                                         R.string.camera_rationale_message));
+Lov.INSTANCE.addRationale(permission,
+                          new PermissionRationale(R.string.rationale_title,
+                                                  R.string.rationale_ok,
+                                                  R.string.rationale_cancel,
+                                                  R.string.rationale_message));
 
-Permission.INSTANCE.request(context, permissions).subscribe(
+Lov.INSTANCE.request(context, permissions).subscribe(
     new Action1<AndroidPermission>() {
         @Override
         public void call(AndroidPermission permission) {

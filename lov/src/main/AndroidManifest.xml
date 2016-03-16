@@ -1,0 +1,8 @@
+<manifest
+    package="net.niiranen.lov"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity android:name=".LovActivity"
+            android:theme="@style/Lov.Activity"/>
+    </application>
+</manifest>

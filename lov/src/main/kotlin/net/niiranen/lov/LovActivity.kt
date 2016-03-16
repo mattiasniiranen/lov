@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.niiranen.permission
+package net.niiranen.lov
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -22,7 +22,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 
-class PermissionActivity : AppCompatActivity() {
+class LovActivity : AppCompatActivity() {
     private val PERMISSION_REQUEST_CODE = 0
 
     companion object {
@@ -40,12 +40,12 @@ class PermissionActivity : AppCompatActivity() {
         }
         val parted = requestPermissions.partition {
             ActivityCompat.shouldShowRequestPermissionRationale(this, it) &&
-                    Permission.rationales.contains(it)
+                    Lov.rationales.contains(it)
         }
         val showRationale = parted.first
         showRationale.forEach { permission ->
-            val rationale = Permission.rationales[permission]!!
-            AlertDialog.Builder(this, R.style.Permission_RationaleDialog)
+            val rationale = Lov.rationales[permission]!!
+            AlertDialog.Builder(this, R.style.Lov_RationaleDialog)
                     .setTitle(rationale.title)
                     .setMessage(rationale.message)
                     .setCancelable(false)
@@ -53,7 +53,7 @@ class PermissionActivity : AppCompatActivity() {
                                        { dialog, which ->
                                            dialog.dismiss()
                                            requestPermissions.remove(permission)
-                                           Permission.permissionSubjects.remove(permission)?.apply {
+                                           Lov.permissionSubjects.remove(permission)?.apply {
                                                onNext(AndroidPermission(permission, false, true))
                                                onCompleted()
                                            }
@@ -78,10 +78,10 @@ class PermissionActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         requestPermissions.forEach {
-            Permission.permissionSubjects.remove(it)?.apply {
+            Lov.permissionSubjects.remove(it)?.apply {
                 onNext(AndroidPermission(it,
-                                         ActivityCompat.checkSelfPermission(this@PermissionActivity, it) == PackageManager.PERMISSION_GRANTED,
-                                         ActivityCompat.shouldShowRequestPermissionRationale(this@PermissionActivity, it)))
+                                         ActivityCompat.checkSelfPermission(this@LovActivity, it) == PackageManager.PERMISSION_GRANTED,
+                                         ActivityCompat.shouldShowRequestPermissionRationale(this@LovActivity, it)))
                 onCompleted()
             }
         }
@@ -95,11 +95,11 @@ class PermissionActivity : AppCompatActivity() {
             return
         }
         for (i in 0..permissions.size - 1) {
-            Permission.permissionSubjects.remove(permissions[i])?.apply {
+            Lov.permissionSubjects.remove(permissions[i])?.apply {
                 onNext(AndroidPermission(permissions[i],
                                          grantResults[i] == PackageManager.PERMISSION_GRANTED,
                                          ActivityCompat.shouldShowRequestPermissionRationale(
-                                                 this@PermissionActivity, permissions[i])
+                                                 this@LovActivity, permissions[i])
                                         ))
                 onCompleted()
             }
