@@ -17,11 +17,29 @@
 package net.niiranen.lov
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class LovTest {
     @Test fun addRationale() {
         Lov.addRationale("test", PermissionRationale(0, 0, 0, 0))
         assertEquals(PermissionRationale(0, 0, 0, 0), Lov.rationales["test"])
+    }
+
+    @Test fun removeRationale() {
+        Lov.addRationale("test", PermissionRationale(0, 0, 0, 0))
+        Lov.removeRationale("test")
+        assertNull(Lov.rationales["test"])
+    }
+
+    @Test fun removeNonExistingRationale() {
+        Lov.removeRationale("test")
+        assertNull(Lov.rationales["test"])
+    }
+
+    @Test fun overwriteRationale() {
+        Lov.addRationale("test", PermissionRationale(0, 0, 0, 0))
+        Lov.addRationale("test", PermissionRationale(1, 2, 3, 4))
+        assertEquals(PermissionRationale(1, 2, 3, 4), Lov.rationales["test"])
     }
 }
