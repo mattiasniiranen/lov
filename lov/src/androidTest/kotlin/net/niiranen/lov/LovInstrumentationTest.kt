@@ -24,7 +24,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
@@ -100,5 +100,34 @@ class LovInstrumentationTest {
                         { latch.countDown() })
         device.allowCurrentPermission()
         latch.await(30, TimeUnit.SECONDS)
+    }
+
+    @Test fun d_denyPermission() {
+        val latch = CountDownLatch(1)
+        Lov.request(activity.activity, Manifest.permission.CAMERA)
+                .subscribe({
+                               assertEquals(AndroidPermission(Manifest.permission.CAMERA, false,
+                                                              true),
+                                            it)
+                           },
+                           { throw it },
+                           { latch.countDown() })
+        assertFalse(device.findObject(UiSelector().text("Never ask again").checkable(true)).exists())
+        device.denyCurrentPermission()
+        latch.await(30, TimeUnit.SECONDS)
+        val latch2 = CountDownLatch(1)
+        Lov.request(activity.activity, Manifest.permission.CAMERA)
+                .subscribe({
+                               assertEquals(AndroidPermission(Manifest.permission.CAMERA, false,
+                                                              false),
+                                            it)
+                           },
+                           { throw it },
+                           { latch2.countDown() })
+        val neverAsk = device.findObject(UiSelector().text("Never ask again").checkable(true))
+        assertTrue(neverAsk.exists())
+        neverAsk.click()
+        device.denyCurrentPermission()
+        latch2.await(30, TimeUnit.SECONDS)
     }
 }
