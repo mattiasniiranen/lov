@@ -33,6 +33,10 @@ object Lov {
         rationales[permission] = rationale
     }
 
+    fun removeRationale(permission: String) {
+        rationales.remove(permission)
+    }
+
     /**
      * Requests permissions to be granted to [context].
      * If a permission is already granted it will not be requested.

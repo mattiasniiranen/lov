@@ -23,16 +23,20 @@ import android.support.test.filters.SdkSuppress
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.uiautomator.UiDevice
+import android.support.test.uiautomator.UiSelector
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.MethodSorters
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 18)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @LargeTest
 class LovInstrumentationTest {
     val activity = ActivityTestRule(TestActivity::class.java)
@@ -44,7 +48,46 @@ class LovInstrumentationTest {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     }
 
-    @Test fun request() {
+    @Test fun a_refusePermission() {
+        val latch = CountDownLatch(1)
+        Lov.request(activity.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(
+                        {
+                            assertEquals(AndroidPermission(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    false, true), it)
+                        },
+                        { throw it },
+                        { latch.countDown() })
+        device.denyCurrentPermission()
+        latch.await(30, TimeUnit.SECONDS)
+    }
+
+    @Test fun b_showRationale() {
+        val latch = CountDownLatch(1)
+        Lov.addRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                         PermissionRationale(android.R.string.dialog_alert_title,
+                                             android.R.string.ok,
+                                             android.R.string.no,
+                                             android.R.string.untitled))
+        Lov.request(activity.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(
+                        {
+                            assertEquals(AndroidPermission(
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                    false, true), it)
+                        },
+                        { throw it },
+                        { latch.countDown() })
+        device.findObject(UiSelector().text(activity.activity.getString(android.R.string.ok)))
+                .click()
+        device.denyCurrentPermission()
+        latch.await(30, TimeUnit.SECONDS)
+        // Remove rationale so other tests don't have to deal with it
+        Lov.removeRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    }
+
+    @Test fun c_acceptPermission() {
         val latch = CountDownLatch(1)
         Lov.request(activity.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(
