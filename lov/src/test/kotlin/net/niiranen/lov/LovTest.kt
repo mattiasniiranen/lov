@@ -16,10 +16,14 @@
 
 package net.niiranen.lov
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import android.Manifest
+import android.test.mock.MockContext
+import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * @suppress
+ */
 class LovTest {
     @Test fun addRationale() {
         Lov.addRationale("test", PermissionRationale(0, 0, 0, 0))
@@ -41,5 +45,11 @@ class LovTest {
         Lov.addRationale("test", PermissionRationale(0, 0, 0, 0))
         Lov.addRationale("test", PermissionRationale(1, 2, 3, 4))
         assertEquals(PermissionRationale(1, 2, 3, 4), Lov.rationales["test"])
+    }
+
+    @Test fun requestPermission() {
+        Lov.request(MockContext(), Manifest.permission.CAMERA).subscribe { permission ->
+            assertNotNull(permission)
+        }
     }
 }
