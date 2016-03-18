@@ -103,7 +103,7 @@ bintray {
 
         version {
             name = version
-            desc = "Lov version $version"
+            desc = "Lov version 0.1.0"
             released = new Date()
             gpg {
                 sign = properties.getProperty("gpg.sign").equals("true")
