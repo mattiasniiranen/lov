@@ -9,12 +9,7 @@ Using the object directly:
 Lov.requestPermissions(context, permissions)
         .subscribe({ if (it.granted) { /* Permission was granted */ } })
 ```
-
-Or with the Context extension method:
-```kotlin
-requestPermissions(permissions)
-        .subscribe({ if (it.granted) { /* Permission was granted */ } })
-```
+Or use the Context extension method to drop the `Lov`.
 
 Show rationale when needed:
 ```kotlin
@@ -25,25 +20,7 @@ Lov.addRationale(permission,
                                      R.string.rationale_message))
 ```
 
-Calling from java:
-```java
-Lov.INSTANCE.addRationale(permission,
-                          new PermissionRationale(R.string.rationale_title,
-                                                  R.string.rationale_ok,
-                                                  R.string.rationale_cancel,
-                                                  R.string.rationale_message));
-
-Lov.INSTANCE.request(context, permissions).subscribe(
-    new Action1<AndroidPermission>() {
-        @Override
-        public void call(AndroidPermission permission) {
-            if (permission.getGranted()) {
-                // Permission was granted
-            }
-        }
-    }
-);
-```
+Of course you can call Lov from Java, just use `Lov.INSTANCE`.
 
 License
 =======
