@@ -102,7 +102,7 @@ bintray {
         githubReleaseNotesFile = 'README.md'
 
         version {
-            name = version
+            name = "0.1.0"
             desc = "Lov version 0.1.0"
             released = new Date()
             gpg {
