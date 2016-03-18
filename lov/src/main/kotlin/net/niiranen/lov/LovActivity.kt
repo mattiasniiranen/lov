@@ -22,6 +22,11 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 
+/**
+ * Activity used for requesting permissions.
+ *
+ * @suppress
+ */
 class LovActivity : AppCompatActivity() {
     private val PERMISSION_REQUEST_CODE = 0
 

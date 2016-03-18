@@ -18,10 +18,11 @@ package net.niiranen.lov
 
 /**
  * Data class representing a permission status.
+ *
  * If [granted] and [showRationale] is both false the user most likely checked 'Never ask again'.
  *
- * @param name The name of the permission.
- * @param granted `true` if the permission vas granted.
- * @param showRationale `true` if permission rationale should be shown.
+ * @property name The name of the permission.
+ * @property granted `true` if the permission vas granted.
+ * @property showRationale `true` if permission rationale should be shown.
  */
 data class AndroidPermission(val name: String, val granted: Boolean, val showRationale: Boolean)

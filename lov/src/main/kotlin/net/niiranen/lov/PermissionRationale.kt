@@ -18,5 +18,13 @@ package net.niiranen.lov
 
 import android.support.annotation.StringRes
 
+/**
+ * Defines how to show a rationale for a permission.
+ *
+ * @property [title] The title of the dialog.
+ * @property [positive] The text on the positive button.
+ * @property [negative] The text on the negative button.
+ * @property [message] The body text of the dialog, should contain the rationale.
+ */
 data class PermissionRationale(@StringRes val title: Int, @StringRes val positive: Int,
                                @StringRes val negative: Int, @StringRes val message: Int)

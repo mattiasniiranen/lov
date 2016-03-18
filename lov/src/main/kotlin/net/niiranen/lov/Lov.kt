@@ -25,14 +25,26 @@ import rx.Observable
 import rx.subjects.PublishSubject
 import java.util.*
 
+/**
+ * A simple permission requester.
+ */
 object Lov {
     internal val permissionSubjects = HashMap<String, PublishSubject<AndroidPermission>>()
     internal val rationales = HashMap<String, PermissionRationale>()
 
+    /**
+     * Add a rationale for [permission].
+     *
+     * The rationale will be shown if [shouldShowRequestPermissionRationale][android.support.v4.app.ActivityCompat.shouldShowRequestPermissionRationale(String)]
+     * returns true when the permission is about to be requested.
+     */
     fun addRationale(permission: String, rationale: PermissionRationale) {
         rationales[permission] = rationale
     }
 
+    /**
+     * Remove the rationale for [permission].
+     */
     fun removeRationale(permission: String) {
         rationales.remove(permission)
     }
