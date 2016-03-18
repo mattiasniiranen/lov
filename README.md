@@ -1,4 +1,4 @@
-Lov
+Lov [ ![Download](https://api.bintray.com/packages/mattiasniiranen/maven/lov/images/download.svg) ](https://bintray.com/mattiasniiranen/maven/lov/_latestVersion)
 ===
 Lov<sup>[loːv]</sup> is a library aimed at making permission requests on Android simple.
 
