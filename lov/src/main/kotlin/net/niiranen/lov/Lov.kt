@@ -55,6 +55,8 @@ object Lov {
      *
      * @param context The context to request permission in.
      * @param permissions The permissions to ask for.
+     *
+     * @sample net.niiranen.lov.LovTest.requestPermission
      */
     fun request(context: Context, vararg permissions: String): Observable<AndroidPermission> {
         val results = mutableListOf<Observable<AndroidPermission>>()

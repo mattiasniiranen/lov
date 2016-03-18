@@ -66,9 +66,15 @@ sourceSets {
     test.java.srcDirs += 'src/test/kotlin'
 }
 dokka {
-    moduleName = 'lov'
+    moduleName = 'Lov'
     outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
+    samples = ['src/test/kotlin']
+    // linkMapping is broken in 0.9.7, https://github.com/Kotlin/dokka/issues/52
+    //linkMapping {
+    //    dir = "src/main/kotlin"
+    //    url = "https://github.com/mattiasniiranen/lov/blob/master/src/main/kotlin"
+    //    suffix = "#L"
+    //}
 }
 
 Properties properties = new Properties()
