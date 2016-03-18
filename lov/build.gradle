@@ -88,7 +88,7 @@ bintray {
 
     configurations = ['archives']
     pkg {
-        repo = 'android'
+        repo = 'maven'
         name = 'lov'
         desc = 'Permission library for Android'
         websiteUrl = siteUrl
@@ -97,35 +97,47 @@ bintray {
         licenses = ['Apache-2.0']
         labels = ['aar', 'android']
         publicDownloadNumbers = true
+
+        githubRepo = 'mattiasniiranen/lov'
+        githubReleaseNotesFile = 'README.md'
+
+        version {
+            name = version
+            desc = "Lov version $version"
+            released = new Date()
+            gpg {
+                sign = properties.getProperty("gpg.sign").equals("true")
+                passphrase = properties.getProperty("gpg.passphrase")
+            }
+        }
     }
 }
 
 install {
     repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name 'Permission library for Android'
+        pom.project {
+            packaging 'aar'
+            name 'Permission library for Android'
+            url siteUrl
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            developers {
+                developer {
+                    id 'mattiasniiranen'
+                    name 'Mattias Niiranen'
+                    email 'mattias@niiranen.net'
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
                 url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'mattiasniiranen'
-                        name 'Mattias Niiranen'
-                        email 'mattias@niiranen.net'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
 
-                }
             }
         }
     }
@@ -136,7 +148,13 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+task dokkaJar(type: Jar, dependsOn: dokka) {
+    classifier = 'dokka'
+    from dokka.outputDirectory
+}
+
 artifacts {
+    archives dokkaJar
     archives sourcesJar
 }
 
