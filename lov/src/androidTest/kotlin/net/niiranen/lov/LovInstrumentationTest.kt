@@ -17,6 +17,7 @@
 package net.niiranen.lov
 
 import android.Manifest
+import android.os.Build
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.LargeTest
 import android.support.test.filters.SdkSuppress
@@ -44,11 +45,17 @@ class LovInstrumentationTest {
 
     lateinit var device: UiDevice
 
+    fun hasRuntimePermissions() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
     @Before fun setUp() {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     }
 
     @Test fun a_refusePermission() {
+        if (!hasRuntimePermissions()) {
+            // Unable to refuse permissions
+            return
+        }
         val latch = CountDownLatch(1)
         Lov.request(activity.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(
@@ -64,6 +71,11 @@ class LovInstrumentationTest {
     }
 
     @Test fun b_showRationale() {
+        if (!hasRuntimePermissions()) {
+            // No runtime permissions, no rationales
+            return
+        }
+
         val latch = CountDownLatch(1)
         Lov.addRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                          PermissionRationale(android.R.string.dialog_alert_title,
@@ -82,12 +94,17 @@ class LovInstrumentationTest {
         device.findObject(UiSelector().text(activity.activity.getString(android.R.string.ok)))
                 .click()
         device.denyCurrentPermission()
-        latch.await(30, TimeUnit.SECONDS)
+        latch.await(10, TimeUnit.SECONDS)
         // Remove rationale so other tests don't have to deal with it
         Lov.removeRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
     @Test fun c_acceptPermission() {
+        if (!hasRuntimePermissions()) {
+            // Unable to accept permissions
+            return
+        }
+
         val latch = CountDownLatch(1)
         Lov.request(activity.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(
@@ -99,10 +116,15 @@ class LovInstrumentationTest {
                         { throw it },
                         { latch.countDown() })
         device.allowCurrentPermission()
-        latch.await(30, TimeUnit.SECONDS)
+        latch.await(10, TimeUnit.SECONDS)
     }
 
     @Test fun d_denyPermission() {
+        if (!hasRuntimePermissions()) {
+            // Unable to deny permission if there is no runtime permissions
+            return
+        }
+
         val latch = CountDownLatch(1)
         Lov.request(activity.activity, Manifest.permission.CAMERA)
                 .subscribe({
@@ -114,7 +136,7 @@ class LovInstrumentationTest {
                            { latch.countDown() })
         assertFalse(device.findObject(UiSelector().text("Never ask again").checkable(true)).exists())
         device.denyCurrentPermission()
-        latch.await(30, TimeUnit.SECONDS)
+        latch.await(10, TimeUnit.SECONDS)
         val latch2 = CountDownLatch(1)
         Lov.request(activity.activity, Manifest.permission.CAMERA)
                 .subscribe({
@@ -128,6 +150,22 @@ class LovInstrumentationTest {
         assertTrue(neverAsk.exists())
         neverAsk.click()
         device.denyCurrentPermission()
-        latch2.await(30, TimeUnit.SECONDS)
+        latch2.await(10, TimeUnit.SECONDS)
+    }
+
+    @Test fun e_noRuntimePermissions() {
+        if (hasRuntimePermissions()) {
+            return
+        }
+
+        // If there is no runtime permissions we should be granted all permissions in the manifest
+        val latch = CountDownLatch(1)
+        Lov.request(activity.activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA)
+                .subscribe({ assertTrue(it.granted) },
+                           { throw it },
+                           { latch.countDown() })
+        latch.await(10, TimeUnit.SECONDS)
     }
 }
