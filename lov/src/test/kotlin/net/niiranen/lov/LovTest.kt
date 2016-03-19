@@ -20,6 +20,8 @@ import android.Manifest
 import android.test.mock.MockContext
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * @suppress
@@ -51,5 +53,27 @@ class LovTest {
         Lov.request(MockContext(), Manifest.permission.CAMERA).subscribe { permission ->
             assertNotNull(permission)
         }
+    }
+
+    @Test fun contextRequestPermissions() {
+        MockContext().requestPermissions(Manifest.permission.CAMERA).subscribe {
+            assertNotNull(it)
+        }
+    }
+
+    @Test fun onPermissions() {
+        val latch = CountDownLatch(1)
+        Lov.onPermissions(MockContext(), Manifest.permission.CAMERA) {
+            latch.countDown()
+        }
+        latch.await(10, TimeUnit.SECONDS)
+    }
+
+    @Test fun contextOnPermission() {
+        val latch = CountDownLatch(1)
+        MockContext().onPermissions(Manifest.permission.CAMERA) {
+            latch.countDown()
+        }
+        latch.await(10, TimeUnit.SECONDS)
     }
 }
