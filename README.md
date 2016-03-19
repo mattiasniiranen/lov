@@ -1,4 +1,4 @@
-Lov [ ![Download](https://api.bintray.com/packages/mattiasniiranen/maven/lov/images/download.svg) ](https://bintray.com/mattiasniiranen/maven/lov/_latestVersion)
+Lov [ ![Download][download_badge] ][download_link]
 ===
 Lov<sup>[loːv]</sup> is a library aimed at making permission requests on Android simple.
 
@@ -22,6 +22,24 @@ Lov.addRationale(permission,
 
 Of course you can call Lov from Java, just use `Lov.INSTANCE`.
 
+Download
+========
+Lov is available on jcenter, or you can grab the aar from [here][download_link].
+
+Gradle
+```groovy
+compile 'net.niiranen:lov:0.1.0'
+```
+Maven
+```xml
+<dependency>
+    <groupId>net.niiranen</groupId>
+    <artifactId>lov</artifactId>
+    <version>0.1.0</version>
+    <type>pom</type>
+</dependency>
+```
+
 License
 =======
     Copyright 2016 Mattias Niiranen
@@ -37,3 +55,6 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[download_badge]: https://api.bintray.com/packages/mattiasniiranen/maven/lov/images/download.svg
+[download_link]: https://bintray.com/mattiasniiranen/maven/lov/_latestVersion
